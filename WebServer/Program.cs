@@ -59,17 +59,19 @@ app.MapFallback(() => Results.NotFound(new
 // });
 
 // Ключ
-// app.Use(async (context, next) =>
-// {
-//     var key = context.Request.Query["key"];
+app.Use(async (context, next) =>
+{
+    var key = context.Request.Query["key"];
 
-//     if (key != "secret") {
-//         Console.WriteLine($"Код ошибки: {context.Response.StatusCode}");
-//     }
+    if (key != "secret") {
+        context.Response.StatusCode = 401;
+        await context.Response.WriteAsync("Code error: 401 Unautharized");
+        return;
+    }
 
-//     await next(context);
+    await next(context);
 
-// });
+});
 
 // app.MapGet("/", () => "Добро пожаловать на сервер!");
 
